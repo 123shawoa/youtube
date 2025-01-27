@@ -3,6 +3,13 @@ import customtkinter
 from yt_dlp import YoutubeDL
 from tkinter import messagebox
 
+def on_progress(d):
+    if d['status'] == 'downloading':
+        percentage = d['_percent_str']
+        progress.set(float(d['_percent_str'].strip('%')))
+        percentis.configure(text = f"{percentage.strip('%')[:-1].replace('.','')}%")
+        app.update_idletasks()
+        
 def startDownload():
     yt_dlp_link = link.get()
     if not yt_dlp_link.strip():
@@ -13,6 +20,7 @@ def startDownload():
         ydl_opts = {
         'format': "best",
         'outtmpl': '%(title)s.%(ext)s',
+        'progress_hooks': [on_progress]
         }
         #Download the video
         with YoutubeDL(ydl_opts) as yt_dlp_object:
@@ -24,18 +32,9 @@ def startDownload():
     except Exception as e:
         finishLabel.configure(text = "Error: " + str(e), text_color = "red")
         messagebox.showerror("Error", str(e))
-    ydl_opts = {
-    'format': "best",
-    'outtmpl': '%(title)s.%(ext)s',
-    'progress_hooks': [progress_hook],
-    }
+
 # Callback function for download progress
-def on_progress(d):
-    if d['status'] == 'downloading':
-        percentage = d['_percent_str']
-        progress['value'] = float(d['_percent_str'].strip('%'))
-        percentis['text'] = f"{percentage.strip('%')[:-1]}%"
-        root.update_idletasks()
+
 # System setting
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
@@ -65,8 +64,9 @@ percentis.pack(padx=10, pady =10)
 
 #Progress percentage
 progress = customtkinter.CTkProgressBar(app, width=400, height=10)
-progress.set(0)
 progress.pack(padx = 10, pady = 10)
+progress.set(0)
+
 
 #Submit the url
 download_button = customtkinter.CTkButton(app, text="Download", command=startDownload)
