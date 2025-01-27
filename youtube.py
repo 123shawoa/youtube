@@ -40,5 +40,9 @@ url_var = tkinter.StringVar()
 link = customtkinter.CTkEntry(app, width=350, height=40, textvariable = url_var)
 link.pack()
 
+#Submit the url
+download_button = customtkinter.CTkButton(app, text="Download", command=startDownload)
+download_button.pack()
+
 #run app
 app.mainloop()
