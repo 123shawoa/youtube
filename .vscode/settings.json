@@ -1,6 +1,9 @@
 {
     "cSpell.words": [
-        "pytube"
+        "padx",
+        "pady",
+        "pytube",
+        "textvariable"
     ],
     "cSpell.ignoreWords": [
         "customtkinter"
