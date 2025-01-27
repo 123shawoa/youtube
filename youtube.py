@@ -11,13 +11,14 @@ def startDownload():
     try:
         #Configuration for Youtube DL
         ydl_opts = {
-            'format': 'best[height = 1080]',
-            'outtmpl': '%(title)s.%(ext)s',
+        'format': "best",
+        'outtmpl': '%(title)s.%(ext)s',
         }
         #Download the video
         with YoutubeDL(ydl_opts) as yt_dlp_object:
-            yt_dlp_object.download([yt_dlp_link])
+            info = yt_dlp_object.extract_info(yt_dlp_link, download=True)
             messagebox.showinfo("Success", "Downloaded successfully")
+
     except Exception as e:
         messagebox.showerror("Error", str(e))
 
@@ -39,9 +40,5 @@ url_var = tkinter.StringVar()
 link = customtkinter.CTkEntry(app, width=350, height=40, textvariable = url_var)
 link.pack()
 
-#Download button
-download = customtkinter.CTkButton(app, text="Download", command= startDownload)
-download.pack(padx=10, pady =10)
-
-# Run app
+#run app
 app.mainloop()
