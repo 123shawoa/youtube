@@ -24,16 +24,18 @@ def startDownload():
     except Exception as e:
         finishLabel.configure(text = "Error: " + str(e), text_color = "red")
         messagebox.showerror("Error", str(e))
-def progress_hook(d):
-    if d['status'] == 'downloading':
-        percent = d['downloaded_bytes'] / d['total_bytes'] * 100
-        progress.set(percent)
-
     ydl_opts = {
     'format': "best",
     'outtmpl': '%(title)s.%(ext)s',
     'progress_hooks': [progress_hook],
     }
+# Callback function for download progress
+def on_progress(d):
+    if d['status'] == 'downloading':
+        percentage = d['_percent_str']
+        progress['value'] = float(d['_percent_str'].strip('%'))
+        percentis['text'] = f"{percentage.strip('%')[:-1]}%"
+        root.update_idletasks()
 # System setting
 customtkinter.set_appearance_mode("System")
 customtkinter.set_default_color_theme("blue")
@@ -57,8 +59,12 @@ link.pack()
 finishLabel = customtkinter.CTkLabel(app, text="")
 finishLabel.pack(padx=10, pady =10)
 
+#progress
+percentis = customtkinter.CTkLabel(app, text="")
+percentis.pack(padx=10, pady =10)
+
 #Progress percentage
-progress = customtkinter.CTkProgressBar(app, width=400, height=10, text="0%")
+progress = customtkinter.CTkProgressBar(app, width=400, height=10)
 progress.set(0)
 progress.pack(padx = 10, pady = 10)
 
