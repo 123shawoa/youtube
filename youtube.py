@@ -42,7 +42,7 @@ link.pack()
 
 #Submit the url
 download_button = customtkinter.CTkButton(app, text="Download", command=startDownload)
-download_button.pack()
+download_button.pack(padx = 10, pady = 10)
 
 #run app
 app.mainloop()
