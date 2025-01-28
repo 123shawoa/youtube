@@ -2,14 +2,24 @@ import tkinter
 import customtkinter
 from yt_dlp import YoutubeDL
 from tkinter import messagebox
+import re
 
 def on_progress(d):
     if d['status'] == 'downloading':
-        percentage = d['_percent_str']
-        progress.set(float(d['_percent_str'].strip('%')))
-        percentis.configure(text = f"{percentage.strip('%')[:-1].replace('.','')}%")
-        app.update_idletasks()
-        
+        percentage = d['_percent_str']  # Example: '\x1b[0;94m  0.0\x1b[0m%'
+        # Remove ANSI escape sequences
+        cleaned_percentage = re.sub(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])', '', percentage)
+        cleaned_percentage = cleaned_percentage.strip().replace('%', '')
+
+        try:
+            progress_value = float(cleaned_percentage)
+            progress.set(progress_value / 100)  # Normalize to 0-1 for the progress bar
+            percentis.configure(text=f"{int(progress_value)}%")  # Display as integer percent
+            app.update_idletasks()
+        except ValueError as e:
+            print(f"Error converting percentage: {e}")
+
+
 def startDownload():
     yt_dlp_link = link.get()
     if not yt_dlp_link.strip():
