@@ -38,7 +38,6 @@ def startDownload():
             title.configure(text = {info['title']})
             messagebox.showinfo("Success", "Downloaded successfully")
             finishLabel.configure(text ="Downloaded successfully")
-
     except Exception as e:
         finishLabel.configure(text = "Error: " + str(e), text_color = "red")
         messagebox.showerror("Error", str(e))
